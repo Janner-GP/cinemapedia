@@ -4,14 +4,14 @@ import 'package:cinemapedia/infrastructure/models/moviedb/movie_moviedb.dart';
 class MovieMapper {
   static Movie moviedbToEntity( MovieMovieDB movieDB ) => Movie(
     adult: movieDB.adult,
-    backdropPath: movieDB.backdropPath != '' ? 'https://img.tmdb.org/t/p/w500${ movieDB.backdropPath }' : 'https://ih1.redbubble.net/image.1893341687.8294/fposter,small,wall_texture,product,750x1000.jpg',
+    backdropPath: (movieDB.backdropPath != null) ? 'https://image.tmdb.org/t/p/w500${ movieDB.backdropPath }' : 'https://ih1.redbubble.net/image.1893341687.8294/fposter,small,wall_texture,product,750x1000.jpg',
     genreIds: movieDB.genreIds.map((e) => e.toString()).toList(),
     id: movieDB.id,
     originalLanguage: movieDB.originalLanguage,
     originalTitle: movieDB.originalTitle,
     overview: movieDB.overview,
     popularity: movieDB.popularity,
-    posterPath: (movieDB.posterPath != '') ? 'https://image.tmdb.org/t/p/w500${ movieDB.backdropPath }' : 'no-poster',
+    posterPath: (movieDB.posterPath != null) ? 'https://image.tmdb.org/t/p/w500${ movieDB.backdropPath }' : 'no-poster',
     releaseDate: movieDB.releaseDate,
     title: movieDB.title,
     video: movieDB.video,

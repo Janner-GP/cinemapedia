@@ -2,6 +2,7 @@ import 'package:animate_do/animate_do.dart';
 import 'package:cinemapedia/config/helers/human_formats.dart';
 import 'package:cinemapedia/domain/entities/movie.dart';
 import 'package:flutter/material.dart';
+import 'package:go_router/go_router.dart';
 
 class MovieHorizontalListView extends StatefulWidget {
 
@@ -77,56 +78,59 @@ class _SlideMovie extends StatelessWidget {
 
     TextTheme textStyle =  Theme.of(context).textTheme;
 
-    return Container(
-      margin: const EdgeInsets.symmetric(horizontal: 8),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          SizedBox(
-            width: 170,
-            height: 220,
-            child: ClipRRect(
-              borderRadius: BorderRadius.circular(20),
-              child: Image.network(
-                movie.posterPath,
-                fit: BoxFit.cover,
-                height: 160,
-                width: 150,
-                loadingBuilder: (context, child, loadingProgress) => loadingProgress == null
-                    ? FadeIn(child: child)
-                    : const Center(child: CircularProgressIndicator()),
+    return GestureDetector(
+      onTap: () => context.go('/movie/${ movie.id }'),
+      child: Container(
+        margin: const EdgeInsets.symmetric(horizontal: 8),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            SizedBox(
+              width: 170,
+              height: 220,
+              child: ClipRRect(
+                borderRadius: BorderRadius.circular(20),
+                child: Image.network(
+                  movie.posterPath,
+                  fit: BoxFit.cover,
+                  height: 160,
+                  width: 150,
+                  loadingBuilder: (context, child, loadingProgress) => loadingProgress == null
+                      ? FadeIn(child: child)
+                      : const Center(child: CircularProgressIndicator()),
+                ),
               ),
             ),
-          ),
-          // Title
-          SizedBox(
-            width: 150,
-            child: Text(
-              movie.title,
-              maxLines: 2,
-              overflow: TextOverflow.ellipsis,
-              style: textStyle.titleSmall
+            // Title
+            SizedBox(
+              width: 150,
+              child: Text(
+                movie.title,
+                maxLines: 2,
+                overflow: TextOverflow.ellipsis,
+                style: textStyle.titleSmall
+              ),
             ),
-          ),
-          // Rating
-          SizedBox(
-            width: 150,
-            child: Row(
-              children: [
-                Icon(Icons.star, size: 15, color: Colors.yellow.shade800),
-                const SizedBox(width: 5),
-                Text(
-                  '${ movie.voteAverage }',
-                  style: textStyle.bodyMedium?.copyWith(color: Colors.yellow.shade800),
-                ),
-                const Spacer(),
-                Text(
-                  HumanFormats.number(movie.popularity), style: textStyle.bodySmall,
-                )
-              ],
-            ),
-          )
-        ],
+            // Rating
+            SizedBox(
+              width: 150,
+              child: Row(
+                children: [
+                  Icon(Icons.star, size: 15, color: Colors.yellow.shade800),
+                  const SizedBox(width: 5),
+                  Text(
+                    '${ movie.voteAverage }',
+                    style: textStyle.bodyMedium?.copyWith(color: Colors.yellow.shade800),
+                  ),
+                  const Spacer(),
+                  Text(
+                    HumanFormats.number(movie.popularity), style: textStyle.bodySmall,
+                  )
+                ],
+              ),
+            )
+          ],
+        ),
       ),
     );
   }

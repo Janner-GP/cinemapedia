@@ -1,3 +1,4 @@
+import 'package:animate_do/animate_do.dart';
 import 'package:cinemapedia/domain/entities/actor.dart';
 import 'package:cinemapedia/domain/entities/movie.dart';
 import 'package:cinemapedia/presentation/providers/providers.dart';
@@ -81,6 +82,14 @@ class _MovieDetails extends StatelessWidget {
                   width: size.width * 0.3,
                   height: size.height * 0.2,
                   fit: BoxFit.cover,
+                  loadingBuilder: (context, child, loadingProgress) {
+                    if (loadingProgress == null) return FadeIn(child: child);
+                    return const Center(
+                      child: CircularProgressIndicator(
+                        strokeWidth: 2,
+                      ),
+                    );
+                  },
                 )
               ),
               const SizedBox(width: 13),
@@ -89,16 +98,20 @@ class _MovieDetails extends StatelessWidget {
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    Text(
-                      movie.title,
-                      style: textStyles.titleMedium,
-                      textAlign: TextAlign.start,
+                    FadeIn(
+                      child: Text(
+                        movie.title,
+                        style: textStyles.titleMedium,
+                        textAlign: TextAlign.start,
+                      ),
                     ),
                     const SizedBox(height: 10),
-                    Text(
-                      movie.overview,
-                      style: textStyles.bodyMedium,
-                      textAlign: TextAlign.justify,
+                    FadeIn(
+                      child: Text(
+                        movie.overview,
+                        style: textStyles.bodyMedium,
+                        textAlign: TextAlign.justify,
+                      ),
                     ),
                   ],
                 ),
@@ -111,13 +124,15 @@ class _MovieDetails extends StatelessWidget {
         // Chips con las categorias
         Padding(
           padding: const EdgeInsets.symmetric(horizontal: 8),
-          child: Wrap(
-            spacing: 10,
-            runSpacing: 10,
-            children: movie.genreIds.map((genre) => Chip(
-              label: Text(genre),
-              shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(20))
-            )).toList(),
+          child: FadeIn(
+            child: Wrap(
+              spacing: 10,
+              runSpacing: 10,
+              children: movie.genreIds.map((genre) => Chip(
+                label: Text(genre),
+                shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(20))
+              )).toList(),
+            ),
           ),
         ),
         const SizedBox(height: 10),
@@ -147,6 +162,14 @@ class _CustomSliverAppBar extends StatelessWidget {
                   child: Image.network(
                 movie.posterPath,
                 fit: BoxFit.cover,
+                loadingBuilder: (context, child, loadingProgress) {
+                  if (loadingProgress == null) return FadeIn(child: child);
+                  return const Center(
+                    child: CircularProgressIndicator(
+                      strokeWidth: 2,
+                    ),
+                  );
+                },
               )),
               const _CustomDecoratedBox(
                 begin: Alignment.topCenter,

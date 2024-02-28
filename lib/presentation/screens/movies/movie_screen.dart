@@ -29,6 +29,7 @@ class MovieScreenState extends ConsumerState<MovieScreen> {
 
   @override
   Widget build(BuildContext context) {
+
     final Movie? movie = ref.watch(movieInfoProvider)[widget.movieId];
 
     if (movie == null) {
@@ -142,19 +143,45 @@ class _MovieDetails extends StatelessWidget {
   }
 }
 
-class _CustomSliverAppBar extends StatelessWidget {
+final isFavoriteProvider = FutureProvider.family.autoDispose((ref, int movieId) {
+  final localStorageRepository = ref.watch(localStorageRepositoryProvider);
+  return localStorageRepository.isFavoriteMovie(movieId);
+});
+
+class _CustomSliverAppBar extends ConsumerWidget {
   final Movie movie;
 
   const _CustomSliverAppBar({required this.movie});
 
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context, WidgetRef ref) {
     final size = MediaQuery.of(context).size;
+    final isFavoriteMovie = ref.watch(isFavoriteProvider(movie.id));
 
     return SliverAppBar(
       backgroundColor: Colors.black,
       expandedHeight: size.height * 0.6,
       foregroundColor: Colors.white,
+      actions: [
+        IconButton(
+          // icon: const Icon(Icons.favorite_border),
+          // icon: const Icon(Icons.favorite_border, color: Color(Colors.red)),
+          onPressed: () async {
+            // ref.watch(localStorageRepositoryProvider).togggleFavoriteMovie(movie);
+            ref.read(favoriteMoviesProvider.notifier).toogleFavorite(movie);
+            await Future.delayed(const Duration(milliseconds: 500));
+            ref.invalidate(isFavoriteProvider(movie.id));
+          },
+          icon: isFavoriteMovie.when(
+            data: (isFavorite) => Icon(
+              isFavorite ? Icons.favorite : Icons.favorite_border,
+              color: isFavorite ? Colors.red : Colors.white,
+            ),
+            error:(_, __) => throw UnimplementedError(),
+            loading: () => const CircularProgressIndicator( strokeWidth: 2 )
+          ),
+        )
+      ],
       flexibleSpace: FlexibleSpaceBar(
           background: Stack(
             children: [
@@ -171,6 +198,12 @@ class _CustomSliverAppBar extends StatelessWidget {
                   );
                 },
               )),
+              const _CustomDecoratedBox(
+                begin: Alignment.topRight,
+                end: Alignment.centerLeft,
+                colors: [Colors.black87, Colors.transparent],
+                stops: [0.0, 0.22],
+              ),
               const _CustomDecoratedBox(
                 begin: Alignment.topCenter,
                 end: Alignment.bottomCenter,

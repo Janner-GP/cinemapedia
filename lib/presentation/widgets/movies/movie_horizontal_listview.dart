@@ -1,5 +1,5 @@
 import 'package:animate_do/animate_do.dart';
-import 'package:cinemapedia/config/helers/human_formats.dart';
+import 'package:cinemapedia/config/helpers/human_formats.dart';
 import 'package:cinemapedia/domain/entities/movie.dart';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
@@ -79,7 +79,7 @@ class _SlideMovie extends StatelessWidget {
     TextTheme textStyle =  Theme.of(context).textTheme;
 
     return GestureDetector(
-      onTap: () => context.go('/movie/${ movie.id }'),
+      onTap: () => context.push('/movie/${ movie.id }'),
       child: Container(
         margin: const EdgeInsets.symmetric(horizontal: 8),
         child: Column(

@@ -2,6 +2,8 @@ import 'package:cinemapedia/domain/entities/movie.dart';
 import 'package:cinemapedia/presentation/providers/movies/movies_repository_provider.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
+final indexNavbarProvider = StateProvider<int>((ref) => 0);
+
 final nowPlayingMoviesProvider = StateNotifierProvider<MoviesNotifier, List<Movie>>((ref) {
   final fecthMoreMovie = ref.watch(movieRepositoryProvider).getNowPlaying;
   return MoviesNotifier(fetchMoreMovies: fecthMoreMovie);
